@@ -13,9 +13,8 @@ def parse_search_results(query):
 
     user_id = [status.user.screen_name for status in tweepy.Cursor(api.search,q=query).items()]
 
-    users = [api.get_user(i) for i in user_id]
+    users = [get_all_tweets(api, i) for i in user_id]
 
-    print user_id
 
 def get_all_tweets(api, user_screen_name):
     """returns the recent 3240 tweets of the user."""
