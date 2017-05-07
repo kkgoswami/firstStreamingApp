@@ -20,14 +20,14 @@ def get_all_tweets(api, user_screen_name):
     """returns the recent 3240 tweets of the user."""
 
     alltweets = []
-    new_tweets = api.user_timeline(screen_name=screen_name, count=200)
+    new_tweets = api.user_timeline(screen_name=user_screen_name, count=200)
     alltweets.extend(new_tweets)
     oldest = alltweets[-1].id - 1
     while len(new_tweets) > 0:
         print "getting tweets before %s" % (oldest)
 
         # all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest)
+        new_tweets = api.user_timeline(screen_name=user_screen_name, count=200, max_id=oldest)
 
         # save most recent tweets
         alltweets.extend(new_tweets)
