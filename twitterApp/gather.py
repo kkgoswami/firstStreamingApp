@@ -43,18 +43,25 @@ def get_user_data(user_screen_name, label):
     return add_user(create_connection('twitter.sqlite'), user_data)
 
 def gather_user_timeline():
-    sql = '''select user_screen_name, isDepressed from search_results'''
+    sql = '''select search_results.user_screen_name, search_results.isDepressed from search_results
+    left join tweets on search_results.user_screen_name =
+    tweets.user_screen_name
+    where tweets.user_screen_name is NULL '''
+
+
+    #sql = '''select user_screen_name, isDepressed from search_results'''
     conn = create_connection('twitter.sqlite')
     cur = conn.cursor()
     cur.execute(sql)
     users = cur.fetchall()
     conn.close()
     for user in users:
+        print "getting user %s" % (user[0])
         if user[1] == 0:
             get_user_data(str(user[0]), (user[1]))
         elif user[1] == "True":  
             get_user_data(str(user[0]), 1) 
-
+         
         get_all_tweets(user[0])
 
 def get_all_tweets(user_screen_name):
@@ -67,7 +74,7 @@ def get_all_tweets(user_screen_name):
     alltweets.extend(new_tweets)
     oldest = alltweets[-1].id - 1
     while len(new_tweets) > 0:
-        print "getting tweets before %s" % (oldest)
+        #print "getting tweets before %s" % (oldest)
 
         # all subsiquent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name=user_screen_name, count=200, max_id=oldest)
@@ -102,7 +109,7 @@ def add_user(conn, user):
 
 
 def add_tweet(conn, tweet): 
-    sql -'''INSERT INTO tweets(tweet_id, user_screen_name, tweet_text, time) VALUES(?,?,?,?)'''
+    sql ='''INSERT INTO tweets(tweet_id, user_screen_name, tweet_text, time) VALUES(?,?,?,?)'''
     cur = conn.cursor()
     try: 
         cur.execute(sql, tweet)
