@@ -40,7 +40,7 @@ def get_user_data(user_screen_name, label):
 
     user = api.get_user(user_screen_name)
     user_data = (user.screen_name, user.location, user.created_at, user.statuses_count, user.friends_count, user.name, label)
-    return add_user(create_connection('twitter.sqlite', user_data)
+    return add_user(create_connection('twitter.sqlite'), user_data)
 
 def gather_user_timeline():
     sql = '''select user_screen_name, isDepressed from search_results'''
