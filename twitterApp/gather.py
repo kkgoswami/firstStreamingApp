@@ -39,7 +39,7 @@ def get_user_data(user_screen_name, label):
     api = tweepy.API(auth)
 
     user = api.get_user(user_screen_name)
-    user_data = (user.screen_name, user.location, user.created_at, user.statuses_count, user.friends_count, user.name, label)
+    user_data = (user.screen_name, user.location, user.created_at, user.statuses_count, user.friends_count, user.followers_count, user.name, label)
     return add_user(create_connection('twitter.sqlite'), user_data)
 
 def gather_user_timeline():
@@ -88,7 +88,7 @@ def get_all_tweets(user_screen_name):
 
 
 def add_user(conn, user): 
-    sql = '''INSERT INTO users(user_screen_name, location, created_at, num_status, num_friends, num_followers, name, isDepressed) VALUES (?,?,?,?,?,?,?,?)'''
+    sql = '''INSERT INTO users(user_screen_name, location, created_at, num_status, num_friends, num_followers, name, isDepressed) VALUES(?,?,?,?,?,?,?,?)'''
     cur = conn.cursor()
     try: 
         cur.execute(sql, user)
